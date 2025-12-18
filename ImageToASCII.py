@@ -3,18 +3,25 @@ import numpy
 
 image_file_path = "image.jpg"
 output_file_path = r"C:\Users\chloe\Desktop\Dev\Image to ASCII\Image-to-ASCII" + r"\output.html"
-image_width = 100
-image_height = 100
+image_width = None
+image_height = None
 is_coloured = True
 char_list = list(" `.-':_,^=;><+!rc*/z?sLTv)J7(|Fi{C}fI31tlu[neoZ5Yxjya]2ESwqkP6h9d4VpOGbUAKXHm8RD#$Bg0MNWQ%&@")
 
+#Sets the default values of the image dimensions to the dimensions of the image
+if image_width == None:
+    image_width = Image.open(image_file_path).width
+if image_height == None:
+    image_height = Image.open(image_file_path).height
+
+#The image is resized, made monochromatic and converted into a numpy array
+img_array = numpy.array(Image.open(image_file_path).resize((image_width,image_height)).convert("L"))
 
 if is_coloured:
 
-    #Two arrays are created, one monochromatic to select which ASCII character to use and the other containing all RGB values
+    #An array containing all RGB values
     img_colours = numpy.array(Image.open(image_file_path).resize((image_width,image_height)))
-    img_array = numpy.array(Image.open(image_file_path).resize((image_width,image_height)).convert("L"))
-
+    
     output = numpy.empty(shape=(image_height,image_width), dtype="U46")
 
     #Loops through every element of the image array and converts it to its corresponding ASCII brightness value
@@ -33,12 +40,8 @@ if is_coloured:
             print(" ".join(row), file=f)
 
     print("Image converted!" + "\n"  "Output saved to: " + output_file_path)
-    
-else:
 
-    #Resizes image and makes it monochromatic
-    img = Image.open(image_file_path).resize((image_width,image_height)).convert("L")
-    img_array = numpy.array(img)
+else:
 
     output = numpy.empty(shape=(image_height,image_width), dtype=str)
 
